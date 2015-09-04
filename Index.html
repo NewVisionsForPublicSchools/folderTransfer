@@ -1,0 +1,86 @@
+<html lang="en">
+  
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" /> 
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <link data-require="bootstrap-css@*" data-semver="3.3.1" rel="stylesheet"
+      href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" />
+    <?!= include('style'); ?>
+  </head>
+  
+  
+  
+  <body>
+    
+    <div><?!= include('navbar'); ?></div>
+    
+    <div class="container-fluid">
+      <div class="pageDiv" id="homeDiv">
+      
+        <h1 class="text-center text-nvBlue">Folder File Transfer Tool</h1>
+        <p class="text-center text-nvGray">Transfers ownership of files in the given folder</p>
+        <br>
+        <form id="transForm" class="form-horizontal" method="get" onsubmit="return false">
+          
+          <div class="form-group">
+            <label class="control-label col-md-3" for="folder"></label>
+            <div class="col-md-6">
+              <div class="input-group">
+                <span class="input-group-addon">Folder</span>
+                <input type="text" class="form-control col-md-6" name="folder" id="folder" placeholder="Folder Id"
+                required="true">
+              </div> <!-- input-group -->
+            </div>
+          </div> <!-- form-gorup -->
+          
+          <div class="form-group">
+            <label class="control-label col-md-3" for="newOwner"></label>
+            <div class="col-md-6">
+              <div class="input-group">
+                <span class="input-group-addon">Transfer To</span>
+                <input type="text" class="form-control col-md-6" name="newOwner" id="newOwner" placeholder="Email of new owner"
+                required="true">
+              </div> <!-- input-group -->
+            </div>
+          </div> <!-- form-gorup -->
+          
+          <div class="text-center">
+            <button class="btn btn-default" id="cancelBtn">Cancel</button>
+            <input class="btn btn-primary" type="submit" id="subBtn" value="Transfer Files">
+          </div>
+        
+        </form>
+        <br><br>
+        <div id="results" style="display:none"></div>
+      </div>
+    </div>
+    
+  </body>
+  
+  
+  
+  <script>
+  $(function(){
+  
+    $('#transForm').submit(processForm);
+    
+    function processForm(){
+      var $formObj = {
+        folder: $('#folder').val().trim(),
+        newOwner: $('#newOwner').val().trim()
+      };
+      google.script.run.withSuccessHandler(displayResults).transferFolderFiles($formObj);
+    }
+    
+    function displayResults(resultHtml){
+      var $outputDiv = $('#results');
+      $outputDiv.html(resultHtml);
+      $('#transForm').trigger('reset');
+      $('#results').show();
+    }
+  })
+  </script>
+  
+</html>
